@@ -1,7 +1,11 @@
 jaeger() {
-  cmd="podman"
-  command -v $cmd > /dev/null || cmd="docker"
-  $cmd start jaeger || $cmd run -d --name jaeger \
+  ccmd="podman"
+  command -v $ccmd > /dev/null || ccmd="docker"
+
+  ocmd="xdg-open"
+  command -v $ocmd > /dev/null || ocmd="open"
+
+  $ccmd start jaeger || $ccmd run -d --name jaeger \
                         -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
                         -p 5775:5775/udp \
                         -p 6831:6831/udp \
@@ -13,7 +17,7 @@ jaeger() {
                         -p 9411:9411 \
                         jaegertracing/all-in-one:latest
 
-  gnome-open http://localhost:16686 &> /dev/null &
+  $ocmd http://localhost:16686 &> /dev/null &
 
-  $cmd logs -f jaeger
+  $ccmd logs -f jaeger
 }
